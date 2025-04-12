@@ -1,0 +1,53 @@
+﻿@inject IClientService ClientService;
+@inject NavigationManager NavigationManager;
+@page "/lisclient"
+@using Services
+@using System.Linq.Expressions
+@rendermode InteractiveServer
+
+<h3>Client</h3>
+
+@foreach (var client in _clients)
+{
+	<div class="row mb-3">
+		<div class="col-4">
+			<NavLink class="nav-link" href="@($"client/{client.Number}")">
+				@client.Name
+			</NavLink>
+		</div>
+		<div class="col-4">
+			@client.Email
+		</div>
+		<div class="col-4">
+			<EditForm Model="_client" Enhance="true">
+				<button type="button" class="btn btn-primary" @onclick="@(async()=>await DeleteClient(client.Number))">X</button>
+			</EditForm>
+		</div>
+	</div>
+}
+<div class="row mb-3">
+	<div class="col-4">
+		<button type="button" class="btn btn-primary" @onclick="@(()=>NewClient())">New</button>
+	</div>
+</div>
+
+@code {
+	private Domain.Client _client { get; set; } = new();
+	private IList<Domain.Client> _clients { get; set; } = new List<Domain.Client>();
+	private async Task DeleteClient(Guid number)
+	{
+		await ClientService.DeleteClient(number);
+		_clients = await ClientService.GetClients(_client);
+		
+	}
+	private void NewClient()
+	{
+		NavigationManager.NavigateTo("/client");
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		_clients = await ClientService.GetClients(_client);
+
+	}
+}
