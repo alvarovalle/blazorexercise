@@ -22,26 +22,26 @@ namespace Repository
         public async Task<IList<Vehicle>> GetAll(Vehicle? filter)
         {
            if (filter != null &&
-                !string.IsNullOrWhiteSpace(filter.Email) &&
-                !string.IsNullOrWhiteSpace(filter.Name))
+                !string.IsNullOrWhiteSpace(filter.Brand) &&
+                !string.IsNullOrWhiteSpace(filter.Model))
             {
                 return await _context.Vehicles
-                    .Where(c => c.Email.Equals(filter.Email, StringComparison.CurrentCultureIgnoreCase)
-                        && c.Name.Equals(filter.Name, StringComparison.CurrentCultureIgnoreCase))
+                    .Where(c => c.Brand.Equals(filter.Brand, StringComparison.CurrentCultureIgnoreCase)
+                        && c.Model.Equals(filter.Model, StringComparison.CurrentCultureIgnoreCase))
                     .ToListAsync();
             }
             else if (filter != null &&
-               !string.IsNullOrWhiteSpace(filter.Email))
+               !string.IsNullOrWhiteSpace(filter.Brand))
             {
                 return await _context.Vehicles
-                    .Where(c => c.Email.Equals(filter.Email, StringComparison.CurrentCultureIgnoreCase))
+                    .Where(c => c.Brand.Equals(filter.Brand, StringComparison.CurrentCultureIgnoreCase))
                     .ToListAsync();
             }
             else if (filter != null &&
-               !string.IsNullOrWhiteSpace(filter.Name))
+               !string.IsNullOrWhiteSpace(filter.Model))
             {
                 return await _context.Vehicles
-                    .Where(c => c.Name.Equals(filter.Name, StringComparison.CurrentCultureIgnoreCase))
+                    .Where(c => c.Model.Equals(filter.Model, StringComparison.CurrentCultureIgnoreCase))
                     .ToListAsync();
             }
             else
