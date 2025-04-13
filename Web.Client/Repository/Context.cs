@@ -7,7 +7,7 @@ namespace Repository;
 public class Context : DbContext
 {
     public DbSet<Client> Clients { get; init; }
-
+    public DbSet<Vehicle> Vehicles { get; init; }
     public static Context Create(IMongoDatabase database) =>
         new(new DbContextOptionsBuilder<Context>()
             .UseMongoDB(database.Client, database.DatabaseNamespace.DatabaseName)

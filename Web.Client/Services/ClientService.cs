@@ -24,7 +24,7 @@ public class ClientService(IClientRepository _clientRepository) : IClientService
     }
     public async Task DeleteClient(Guid number)
     {
-        await _clientRepository.DeleteClient(number);
+        await _clientRepository.Delete(number);
     }
     public async Task<string> CheckIfEmailExists(string email)
     {

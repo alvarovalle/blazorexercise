@@ -6,26 +6,26 @@ using MongoDB.Driver;
 
 namespace Repository
 {
-    public class ClientRepository : IClientRepository
+    public class VehicleRepository : IVehicleRepository
     {
         private Context _context {  get; set; }
-        public ClientRepository(Context context)
+        public VehicleRepository(Context context)
         {
             _context = context;
             _context.Database.AutoTransactionBehavior = AutoTransactionBehavior.Never;
         }
-        public async Task<Client?> GetByNumber(Guid number)
+        public async Task<Vehicle?> GetByNumber(Guid number)
         {
-            var client = await _context.Clients.FirstOrDefaultAsync(c => c.Number.Equals(number.ToString()));
-            return client;
+            var Vehicle = await _context.Vehicles.FirstOrDefaultAsync(c => c.Number.Equals(number.ToString()));
+            return Vehicle;
         }
-        public async Task<IList<Client>> GetAll(Client? filter)
+        public async Task<IList<Vehicle>> GetAll(Vehicle? filter)
         {
            if (filter != null &&
                 !string.IsNullOrWhiteSpace(filter.Email) &&
                 !string.IsNullOrWhiteSpace(filter.Name))
             {
-                return await _context.Clients
+                return await _context.Vehicles
                     .Where(c => c.Email.Equals(filter.Email, StringComparison.CurrentCultureIgnoreCase)
                         && c.Name.Equals(filter.Name, StringComparison.CurrentCultureIgnoreCase))
                     .ToListAsync();
@@ -33,29 +33,29 @@ namespace Repository
             else if (filter != null &&
                !string.IsNullOrWhiteSpace(filter.Email))
             {
-                return await _context.Clients
+                return await _context.Vehicles
                     .Where(c => c.Email.Equals(filter.Email, StringComparison.CurrentCultureIgnoreCase))
                     .ToListAsync();
             }
             else if (filter != null &&
                !string.IsNullOrWhiteSpace(filter.Name))
             {
-                return await _context.Clients
+                return await _context.Vehicles
                     .Where(c => c.Name.Equals(filter.Name, StringComparison.CurrentCultureIgnoreCase))
                     .ToListAsync();
             }
             else
-                return await _context.Clients.ToListAsync();
+                return await _context.Vehicles.ToListAsync();
 
         }
-        public async Task Create(Client client)
+        public async Task Create(Vehicle Vehicle)
         {
             try
             {
-                client.Id = ObjectId.GenerateNewId();
+                Vehicle.Id = ObjectId.GenerateNewId();
                 Console.WriteLine("Repo GenerateNewId");
-                await _context.Clients.AddAsync(client);
-                Console.WriteLine("Repo Clients.Add");
+                await _context.Vehicles.AddAsync(Vehicle);
+                Console.WriteLine("Repo Vehicles.Add");
                 await _context.SaveChangesAsync();
                 Console.WriteLine("Repo SaveChangesAsync");
             }
@@ -71,8 +71,8 @@ namespace Repository
         {
             try
             {
-                var client = await _context.Clients.FirstOrDefaultAsync(c => c.Number.Equals(number.ToString()));
-                _context.Clients.Remove(client);
+                var Vehicle = await _context.Vehicles.FirstOrDefaultAsync(c => c.Number.Equals(number.ToString()));
+                _context.Vehicles.Remove(Vehicle);
                 //TODO: Nao esta deixando excluir dois seguidos
                 await _context.SaveChangesAsync();
             }
