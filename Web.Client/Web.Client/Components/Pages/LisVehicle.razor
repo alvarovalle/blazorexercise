@@ -1,0 +1,53 @@
+﻿@inject IVehicleService VehicleService;
+@inject NavigationManager NavigationManager;
+@page "/lisvehicle"
+@using Services
+@using System.Linq.Expressions
+@rendermode InteractiveServer
+
+<h3>vehicle</h3>
+
+@foreach (var vehicle in _vehicles)
+{
+	<div class="row mb-3">
+		<div class="col-4">
+			<NavLink class="nav-link" href="@($"vehicle/{vehicle.Number}")">
+				@vehicle.Brand
+			</NavLink>
+		</div>
+		<div class="col-4">
+			@vehicle.Model
+		</div>
+		<div class="col-4">
+			<EditForm Model="_vehicle" Enhance="true">
+				<button type="button" class="btn btn-primary" @onclick="@(async()=>await Deletevehicle(vehicle.Number))">X</button>
+			</EditForm>
+		</div>
+	</div>
+}
+<div class="row mb-3">
+	<div class="col-4">
+		<button type="button" class="btn btn-primary" @onclick="@(()=>Newvehicle())">New</button>
+	</div>
+</div>
+
+@code {
+	private Domain.Vehicle _vehicle { get; set; } = new();
+	private IList<Domain.Vehicle> _vehicles { get; set; } = new List<Domain.Vehicle>();
+	private async Task Deletevehicle(Guid number)
+	{
+		await VehicleService.DeleteVehicle(number);
+		_vehicles = await VehicleService.GetVehicles(_vehicle);
+		
+	}
+	private void Newvehicle()
+	{
+		NavigationManager.NavigateTo("/vehicle");
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		_vehicles = await VehicleService.GetVehicles(_vehicle);
+
+	}
+}

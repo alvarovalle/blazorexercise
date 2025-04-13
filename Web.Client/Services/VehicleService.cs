@@ -3,64 +3,64 @@ using Repository;
 
 namespace Services;
 
-public class ClientService(IClientRepository _clientRepository) : IClientService
+public class VehicleService(IVehicleRepository _VehicleRepository) : IVehicleService
 {
-    public async Task<IList<Domain.Client>> GetClients(Domain.Client? filter)
+    public async Task<IList<Domain.Vehicle>> GetVehicles(Domain.Vehicle? filter)
     {
-        var clientsData = await _clientRepository.GetAll(new Repository.Client()
+        var VehiclesData = await _VehicleRepository.GetAll(new Repository.Vehicle()
         {
-            Name = filter?.Name!,
-            Email = filter?.Email!
+            Brand = filter?.Brand!,
+            Model = filter?.Model!
         });
 
-        var clients = clientsData.Select(client => new Domain.Client()
+        var Vehicles = VehiclesData.Select(Vehicle => new Domain.Vehicle()
         {
-            Number = new Guid(client.Number),
-            Name = client.Name,
-            Email = client.Email,
+            Number = new Guid(Vehicle.Number),
+            Brand = Vehicle.Brand,
+            Model = Vehicle.Model,
         }).ToList();
 
-        return clients;
+        return Vehicles;
     }
-    public async Task DeleteClient(Guid number)
+    public async Task DeleteVehicle(Guid number)
     {
-        await _clientRepository.Delete(number);
+        await _VehicleRepository.Delete(number);
     }
     public async Task<string> CheckIfEmailExists(string email)
     {
         if (string.IsNullOrWhiteSpace(email)) 
             return string.Empty;
 
-        var clients = await GetClients(new Domain.Client() { Email = email });
-        if (clients.Any())
+        var Vehicles = await GetVehicles(new Domain.Vehicle() { Model = email });
+        if (Vehicles.Any())
         {
             return "Email already in use";
         }
 
         return string.Empty;
     }
-    public async Task RegisterNewClient(Domain.Client client)
+    public async Task RegisterNewVehicle(Domain.Vehicle Vehicle)
     {
 
-        client.RegisterNewClient();
-        var clientData = new Repository.Client()
+        Vehicle.RegisterNewVehicle();
+        var VehicleData = new Repository.Vehicle()
         {
-            Number = client.Number.ToString(),
-            Name = client.Name,
-            Email = client.Email,
+            Number = Vehicle.Number.ToString(),
+            Brand = Vehicle.Brand,
+            Model = Vehicle.Model,
         };
-        await _clientRepository.Create(clientData);
+        await _VehicleRepository.Create(VehicleData);
     }
 
-    public async Task<Domain.Client> GetClientByNumber(Guid number)
+    public async Task<Domain.Vehicle> GetVehicleByNumber(Guid number)
     {
-        var clientData = await _clientRepository.GetByNumber(number);
-        var client = new Domain.Client()
+        var VehicleData = await _VehicleRepository.GetByNumber(number);
+        var Vehicle = new Domain.Vehicle()
         {
-            Number = new Guid(clientData.Number),
-            Name = clientData.Name,
-            Email = clientData.Email,
+            Number = new Guid(VehicleData.Number),
+            Brand = VehicleData.Brand,
+            Model = VehicleData.Model,
         };
-        return client;
+        return Vehicle;
     }
 }
