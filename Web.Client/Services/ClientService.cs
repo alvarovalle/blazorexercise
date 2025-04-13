@@ -1,5 +1,5 @@
 ﻿using Domain;
-using RepositorySQL;
+using Repository;
 
 namespace Services;
 
@@ -7,7 +7,7 @@ public class ClientService(IClientRepository _clientRepository) : IClientService
 {
     public async Task<IList<Domain.Client>> GetClients(Domain.Client? filter)
     {
-        var clientsData = await _clientRepository.GetAll(new RepositorySQL.Client()
+        var clientsData = await _clientRepository.GetAll(new Repository.Client()
         {
             Name = filter?.Name!,
             Email = filter?.Email!
@@ -43,7 +43,7 @@ public class ClientService(IClientRepository _clientRepository) : IClientService
     {
 
         client.RegisterNewClient();
-        var clientData = new RepositorySQL.Client()
+        var clientData = new Repository.Client()
         {
             Number = client.Number.ToString(),
             Name = client.Name,
