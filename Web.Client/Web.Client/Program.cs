@@ -15,6 +15,8 @@ builder.Services.AddDbContext<Context>(options => options.UseMongoDB(LocalConnec
 
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IVehicleService, VehicleService>();
+builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 
 var app = builder.Build();
 

@@ -5,40 +5,35 @@
 @using System.Linq.Expressions
 @rendermode InteractiveServer
 
-<h3>Client</h3>
+<!-- partial:index.partial.html -->
+<div class="wrap">
+	<EditForm FormName="ClientForm" Model="_client" Enhance="true" OnValidSubmit="OnValidSubmit">
+		<DataAnnotationsValidator></DataAnnotationsValidator>
+		<ValidationSummary></ValidationSummary>
+		<div class="form-header">
+			<h2>Client Registration</h2>
+		</div>
+		<div class="form-body">
+			<fieldset>
+				<label for="name">Name</label>
+				<InputText @bind-Value="_client.Name" DisplayName="name"></InputText>
+				<label for="email">Email</label>
+				<InputText @bind-Value="_client.Email" DisplayName="email" @ValueChanged="@(()=>EmailValueChanged())"></InputText>
+			</fieldset>
+		</div>
+		<div class="form-footer">
+			<div class="row">
+				<div class="col">
+					<input type="submit" value="Create" />
+				</div>
+				<div class="col">
+					<input type="button" @onclick="@(()=>OnCancel())" value="Cancel" />
+				</div>
+			</div>
+		</div>
+	</EditForm>
+</div>
 
-<EditForm FormName="ClientForm" Model="_client" Enhance="true" OnValidSubmit="OnValidSubmit">
-	<DataAnnotationsValidator></DataAnnotationsValidator>
-	<ValidationSummary></ValidationSummary>
-
-	<div class="row mb-3">
-		<div class="col-2">
-			<label class="col-form-label">Name</label>
-		</div>
-		<div class="col-6">
-			<InputText @bind-Value="_client.Name"></InputText>
-		</div>
-	</div>
-
-	<div class="row mb-3">
-
-		<div class="col-2">
-			<label class="col-form-label">Email</label>
-		</div>
-		<div class="col-6">
-			<InputText @bind-Value="_client.Email" @ValueChanged="@(()=>EmailValueChanged())"></InputText>
-		</div>
-	</div>
-
-	<div class="row mb-3">
-		<div class="col-8">
-			<input type="submit" value="Save" />
-		</div>
-		<div class="col-8">
-			<input type="button" @onclick="@(()=>OnCancel())" value="Cancel" />
-		</div>
-	</div>
-</EditForm>
 @code {
 	[Parameter]
 	public string? _number { get; set; }
@@ -92,7 +87,7 @@
 		{
 			Console.WriteLine(ex.Message);
 		}
-	
+
 	}
 	private void OnCancel()
 	{
