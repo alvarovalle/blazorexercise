@@ -28,7 +28,7 @@ public class ClientService(IClientRepository _clientRepository) : IClientService
     }
     public async Task<string> CheckIfEmailExists(string email)
     {
-        if (string.IsNullOrWhiteSpace(email)) 
+        if (string.IsNullOrWhiteSpace(email))
             return string.Empty;
 
         var clients = await GetClients(new Domain.Client() { Email = email });
@@ -39,17 +39,30 @@ public class ClientService(IClientRepository _clientRepository) : IClientService
 
         return string.Empty;
     }
-    public async Task RegisterNewClient(Domain.Client client)
+    private Repository.Client GetClientData(Domain.Client client)
     {
-
-        client.RegisterNewClient();
         var clientData = new Repository.Client()
         {
             Number = client.Number.ToString(),
             Name = client.Name,
             Email = client.Email,
         };
-        await _clientRepository.Create(clientData);
+        return clientData;
+    }
+    public async Task RegisterClient(Domain.Client client)
+    {
+        Repository.Client? clientData = null;
+        if (Guid.Empty.Equals(client.Number))
+        {
+            client.RegisterNewClient();
+            clientData = GetClientData(client);
+            await _clientRepository.Create(clientData);
+        }
+        else
+        {
+            clientData = GetClientData(client);
+            await _clientRepository.Update(clientData);
+        }
     }
 
     public async Task<Domain.Client> GetClientByNumber(Guid number)

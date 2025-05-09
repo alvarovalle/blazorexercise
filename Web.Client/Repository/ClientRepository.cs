@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Repository
 {
@@ -81,6 +82,24 @@ namespace Repository
                 Console.WriteLine(ex.Message);
             }
 
+        }
+
+        public async Task Update(Client client)
+        {
+            try
+            {
+                var clientData = await _context.Clients.FirstOrDefaultAsync(c => c.Number.Equals(client.Number));
+                clientData.Number = client.Number;
+                clientData.Name = client.Name;
+                clientData.Email = client.Email;
+
+                _context.Clients.Update(clientData);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

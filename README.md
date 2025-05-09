@@ -11,3 +11,4 @@ this is a basic exercise to show some razor basic features
 6-unit tests
 7-integration tests
 8-docker compose
+9-mcp for ai agents

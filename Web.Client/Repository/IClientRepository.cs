@@ -7,5 +7,6 @@ public interface IClientRepository
     Task<IList<Client>> GetAll(Client? filter);
     Task Create(Client car);
     Task Delete(Guid number);
+    Task Update(Client client);
 }
 

@@ -3,6 +3,7 @@
 @page "/client/{_number?}"
 @using Services
 @using System.Linq.Expressions
+@using Web.Client.Components.Pages.Controls
 @rendermode InteractiveServer
 
 <!-- partial:index.partial.html -->
@@ -10,6 +11,7 @@
 	<EditForm FormName="ClientForm" Model="_client" Enhance="true" OnValidSubmit="OnValidSubmit">
 		<DataAnnotationsValidator></DataAnnotationsValidator>
 		<ValidationSummary></ValidationSummary>
+		<InputGuid @bind-Value="_client.Number" hidden></InputGuid>
 		<div class="form-header">
 			<h2>Client Registration</h2>
 		</div>
@@ -24,7 +26,7 @@
 		<div class="form-footer">
 			<div class="row">
 				<div class="col">
-					<input type="submit" value="Create" />
+					<input type="submit" value="Save" />
 				</div>
 				<div class="col">
 					<input type="button" @onclick="@(()=>OnCancel())" value="Cancel" />
@@ -37,10 +39,11 @@
 @code {
 	[Parameter]
 	public string? _number { get; set; }
+	[SupplyParameterFromForm]
+	private Domain.Client _client { get; set; } = new();
 
 	private EditContext _editContext;
 	private ValidationMessageStore? _messageStore;
-	private Domain.Client _client { get; set; } = new();
 	private string _email { get; set; }
 	private IList<Domain.Client> _clients { get; set; } = new List<Domain.Client>();
 	protected override async Task OnParametersSetAsync()
@@ -72,16 +75,14 @@
 
 	private async Task OnValidSubmit(EditContext editContext)
 	{
+		Console.WriteLine("OnValidSubmit");
 		try
 		{
-
-			Console.WriteLine("OnValidSubmit");
-			await ClientService.RegisterNewClient(_client);
-
-			Console.WriteLine("RegisterNewClient");
+			await ClientService.RegisterClient(_client);
+			Console.WriteLine("RegisterClient");
+			
 			NavigationManager.NavigateTo("/lisclient");
-
-			Console.WriteLine("NavigateTo");
+			Console.WriteLine("NavigateTo /lisclient");
 		}
 		catch (Exception ex)
 		{
