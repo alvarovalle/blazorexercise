@@ -26,18 +26,18 @@ public class ClientService(IClientRepository _clientRepository) : IClientService
     {
         await _clientRepository.Delete(number);
     }
-    public async Task<string> CheckIfEmailExists(string email)
+    public async Task<Guid> CheckEmailOwner(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
-            return string.Empty;
+            return Guid.Empty;
 
         var clients = await GetClients(new Domain.Client() { Email = email });
         if (clients.Any())
         {
-            return "Email already in use";
+            return clients.FirstOrDefault().Number;
         }
 
-        return string.Empty;
+        return Guid.Empty;
     }
     private Repository.Client GetClientData(Domain.Client client)
     {

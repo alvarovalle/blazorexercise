@@ -20,7 +20,7 @@
 				<label for="name">Name</label>
 				<InputText @bind-Value="_client.Name" DisplayName="name"></InputText>
 				<label for="email">Email</label>
-				<InputText @bind-Value="_client.Email" DisplayName="email" @ValueChanged="@(()=>EmailValueChanged())"></InputText>
+				<InputText @bind-Value="_client.Email" DisplayName="email" @onblur="EmailValueChanged"></InputText>
 			</fieldset>
 		</div>
 		<div class="form-footer">
@@ -42,9 +42,6 @@
 	[SupplyParameterFromForm]
 	private Domain.Client _client { get; set; } = new();
 
-	private EditContext _editContext;
-	private ValidationMessageStore? _messageStore;
-	private string _email { get; set; }
 	private IList<Domain.Client> _clients { get; set; } = new List<Domain.Client>();
 	protected override async Task OnParametersSetAsync()
 	{
@@ -55,24 +52,13 @@
 	}
 	private void EmailValueChanged()
 	{
-		var message = ClientService.CheckIfEmailExists(_client.Email).Result;
-
-		if (!string.IsNullOrWhiteSpace(message))
-		{
-			_messageStore?.Clear();
-			_messageStore?.Add(() => _client.Email, "Email already in use");
-			_editContext.Validate();
-		}
-
+		var number = ClientService.CheckEmailOwner(_client.Email).Result;
+		_client.EmailExists = (!Guid.Empty.Equals(number) && !number.Equals(_client.Number));
 	}
 	protected override async Task OnInitializedAsync()
 	{
-		_editContext = new EditContext(_client);
-		_messageStore = new ValidationMessageStore(_editContext);
 
 	}
-
-
 	private async Task OnValidSubmit(EditContext editContext)
 	{
 		Console.WriteLine("OnValidSubmit");
@@ -80,7 +66,7 @@
 		{
 			await ClientService.RegisterClient(_client);
 			Console.WriteLine("RegisterClient");
-			
+
 			NavigationManager.NavigateTo("/lisclient");
 			Console.WriteLine("NavigateTo /lisclient");
 		}

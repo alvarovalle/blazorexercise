@@ -10,6 +10,8 @@ public class Client
     [Required]
     [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$",ErrorMessage = "Invalid Email")]
     public string Email { get; set; }
+    [AllowedValues(false, ErrorMessage = "Email already in use")]
+    public bool EmailExists { get; set; }
     public void RegisterNewClient()
     {
         if (Number == Guid.Empty)
