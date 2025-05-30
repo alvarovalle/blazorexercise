@@ -48,13 +48,20 @@ namespace Repository
                 return await _context.Vehicles.ToListAsync();
 
         }
-        public async Task Create(Vehicle Vehicle)
+        public async Task Create(Vehicle vehicle)
         {
             try
             {
-                Vehicle.Id = ObjectId.GenerateNewId();
+                vehicle.Id = ObjectId.GenerateNewId();
                 Console.WriteLine("Repo GenerateNewId");
-                await _context.Vehicles.AddAsync(Vehicle);
+                await _context.Vehicles.AddAsync(vehicle);
+                var position = new PositionInTime()
+                {
+                    Number = new Guid(vehicle.Number),
+                    Position = string.Empty,
+                    When = DateTime.UtcNow,
+                };
+                await _context.Positions.AddAsync(position);
                 Console.WriteLine("Repo Vehicles.Add");
                 await _context.SaveChangesAsync();
                 Console.WriteLine("Repo SaveChangesAsync");

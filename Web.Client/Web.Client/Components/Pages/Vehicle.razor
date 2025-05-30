@@ -14,10 +14,12 @@
 		</div>
 		<div class="form-body">
 			<fieldset>
-				<label for="brand">Brand</label>
-				<InputText @bind-Value="_vehicle.Brand" DisplayName="brand"></InputText>
 				<label for="model">Model</label>
 				<InputText @bind-Value="_vehicle.Model" DisplayName="model"></InputText>
+				<label for="model">License Plate</label>
+				<InputText @bind-Value="_vehicle.LicensePlate" DisplayName="LicensePlate"></InputText>
+				<label for="brand">Brand</label>
+				<InputText @bind-Value="_vehicle.Brand" DisplayName="brand"></InputText>
 			</fieldset>
 		</div>
 		<div class="form-footer">

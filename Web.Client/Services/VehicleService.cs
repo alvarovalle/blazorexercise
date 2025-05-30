@@ -3,28 +3,29 @@ using Repository;
 
 namespace Services;
 
-public class VehicleService(IVehicleRepository _VehicleRepository) : IVehicleService
+public class VehicleService(IVehicleRepository _vehicleRepository) : IVehicleService
 {
     public async Task<IList<Domain.Vehicle>> GetVehicles(Domain.Vehicle? filter)
     {
-        var VehiclesData = await _VehicleRepository.GetAll(new Repository.Vehicle()
+        var vehiclesData = await _vehicleRepository.GetAll(new Repository.Vehicle()
         {
             Brand = filter?.Brand!,
             Model = filter?.Model!
         });
 
-        var Vehicles = VehiclesData.Select(Vehicle => new Domain.Vehicle()
+        var vehicles = vehiclesData.Select(vehicle => new Domain.Vehicle()
         {
-            Number = new Guid(Vehicle.Number),
-            Brand = Vehicle.Brand,
-            Model = Vehicle.Model,
+            Number = new Guid(vehicle.Number),
+            LicensePlate = vehicle.LicensePlate,
+            Brand = vehicle.Brand,
+            Model = vehicle.Model,
         }).ToList();
 
-        return Vehicles;
+        return vehicles;
     }
     public async Task DeleteVehicle(Guid number)
     {
-        await _VehicleRepository.Delete(number);
+        await _vehicleRepository.Delete(number);
     }
     public async Task<string> CheckIfEmailExists(string email)
     {
@@ -39,28 +40,30 @@ public class VehicleService(IVehicleRepository _VehicleRepository) : IVehicleSer
 
         return string.Empty;
     }
-    public async Task RegisterNewVehicle(Domain.Vehicle Vehicle)
+    public async Task RegisterNewVehicle(Domain.Vehicle vehicle)
     {
 
-        Vehicle.RegisterNewVehicle();
+        vehicle.RegisterNewVehicle();
         var VehicleData = new Repository.Vehicle()
         {
-            Number = Vehicle.Number.ToString(),
-            Brand = Vehicle.Brand,
-            Model = Vehicle.Model,
+            Number = vehicle.Number.ToString(),
+            LicensePlate = vehicle.LicensePlate.ToString(),
+            Brand = vehicle.Brand,
+            Model = vehicle.Model,
         };
-        await _VehicleRepository.Create(VehicleData);
+        await _vehicleRepository.Create(VehicleData);
     }
 
     public async Task<Domain.Vehicle> GetVehicleByNumber(Guid number)
     {
-        var VehicleData = await _VehicleRepository.GetByNumber(number);
-        var Vehicle = new Domain.Vehicle()
+        var vehicleData = await _vehicleRepository.GetByNumber(number);
+        var vehicle = new Domain.Vehicle()
         {
-            Number = new Guid(VehicleData.Number),
-            Brand = VehicleData.Brand,
-            Model = VehicleData.Model,
+            Number = new Guid(vehicleData.Number),
+            LicensePlate = vehicleData.LicensePlate.ToString(),
+            Brand = vehicleData.Brand,
+            Model = vehicleData.Model,
         };
-        return Vehicle;
+        return vehicle;
     }
 }

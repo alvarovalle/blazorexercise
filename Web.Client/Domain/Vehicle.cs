@@ -6,6 +6,8 @@ public class Vehicle
 {
     public Guid Number { get; set; }
     [Required]
+    public string LicensePlate { get; set; }
+    [Required]
     public string Brand { get; set; }
     [Required]
     public string Model { get; set; }
@@ -13,6 +15,7 @@ public class Vehicle
     public int NumberSeats { get; set; }
     [Required]
     public int NumberDoors { get; set; }
+    public PositionInTime? PositionInTime { get; set; }
     public void RegisterNewVehicle()
     {
         if (Number == Guid.Empty)

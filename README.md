@@ -2,13 +2,14 @@
 this is a basic exercise to show some razor basic features
 
 # todo:
-1-Improve front end design (client ok, vehicle missing)
-2-in client razor implement the "repeated email validation"
-3-Add fields NumberSeats and NumnberDoors in vehicle registration
-4-Create component to handle the road trips
+1-Create component to handle the road trips
   (logged client could see the roadtrips)
-5-login for clients, to control access to the road trips and to avoid access to vehicles and client registration
-6-unit tests
-7-integration tests
-8-docker compose
-9-mcp for ai agents
+2-login for clients, to control access to the road trips and to avoid access to vehicles and client registration
+3-unit tests
+4-integration tests
+5-docker compose
+6-mcp for ai agents
+7-improve log
+
+
+//https://darnton.co.nz/2020/11/29/geolocation-in-blazor/
