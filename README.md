@@ -8,7 +8,6 @@ this is a basic exercise to show some razor basic features
 * 3-unit tests
 * 4-integration tests
 * 5-docker compose
-* 6-mcp for ai agents
-* 7-improve log
-* 8-Implement
+* 6-improve log
+* 7-Implement
 //https://darnton.co.nz/2020/11/29/geolocation-in-blazor/
